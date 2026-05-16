@@ -1,0 +1,21 @@
+port_id,name,type,country_id
+1,JFK International Airport,Airport,1
+2,Heathrow Airport,Airport,2
+3,Frankfurt Airport,Airport,3
+4,Dubai International Airport,Airport,4
+5,Narita International Airport,Airport,5
+6,Port of Southampton,Seaport,2
+7,Los Angeles International Airport,Airport,1
+8,Charles de Gaulle Airport,Airport,2
+9,Singapore Changi Airport,Airport,9
+10,Suvarnabhumi Airport,Airport,23
+11,Toronto Pearson Airport,Airport,10
+12,Sydney Airport,Airport,11
+13,Indira Gandhi International Airport,Airport,9
+14,Beijing Capital Airport,Airport,8
+15,Ben Gurion Airport,Airport,4
+16,Istanbul Airport,Airport,17
+17,Amsterdam Schiphol Airport,Airport,35
+18,Madrid Barajas Airport,Airport,6
+19,Barcelona Airport,Airport,6
+20,Munich Airport,Airport,3

@@ -1,0 +1,51 @@
+country_id,name,population,visa_policy
+1,United States,331000000,Visa required for most countries
+2,United Kingdom,67200000,Visa waiver for US, Canada, Australia
+3,Germany,83200000,Schengen visa required
+4,France,67390000,Schengen visa required
+5,Italy,60240000,Schengen visa required
+6,Spain,47350000,Schengen visa required
+7,Japan,125800000,Visa required; eVisa available
+8,China,1412000000,Visa required for most nationalities
+9,India,1380000000,e-Visa available
+10,Canada,38200000,eTA required
+11,Australia,25700000,Visa required; eVisa available
+12,Brazil,213000000,Visa required for some nationalities
+13,Mexico,128900000,Visa required for some
+14,South Korea,51700000,eVisa available
+15,Russia,144000000,Visa required
+16,South Africa,59300000,Visa required
+17,Turkey,84300000,e-Visa available
+18,Indonesia,273500000,Visa on arrival
+19,Pakistan,220900000,Visa required
+20,Bangladesh,164700000,Visa required
+21,Nigeria,206100000,Visa required
+22,Egypt,102300000,Visa on arrival
+23,Thailand,69800000,Visa on arrival
+24,Vietnam,97340000,eVisa available
+25,Malaysia,32370000,Visa-free for many
+26,Singapore,5450000,Visa-free
+27,Philippines,109600000,Visa required
+28,Kenya,53770000,eVisa required
+29,Argentina,45100000,Visa required
+30,Chile,19100000,Visa-free for many
+31,Peru,32970000,Visa required
+32,Colombia,50880000,Visa required
+33,New Zealand,4822000,Visa required
+34,Ireland,4938000,Visa required
+35,Netherlands,17130000,Schengen visa
+36,Sweden,10090000,Schengen visa
+37,Norway,5375000,Schengen visa
+38,Denmark,5831000,Schengen visa
+39,Finland,5527000,Schengen visa
+40,Switzerland,8655000,Schengen visa
+41,Austria,9006000,Schengen visa
+42,Belgium,11590000,Schengen visa
+43,Portugal,10196709,Schengen visa
+44,Greece,10700000,Schengen visa
+45,Poland,37900000,Schengen visa
+46,Czech Republic,10700000,Schengen visa
+47,Hungary,9660000,Schengen visa
+48,Saudi Arabia,34810000,Visa required
+49,Qatar,2880000,Visa on arrival
+50,Oman,5100000,eVisa available
