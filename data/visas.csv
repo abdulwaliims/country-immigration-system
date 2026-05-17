@@ -49,3 +49,53 @@ visa_id,traveler_id,country_id,type,status,start_date,end_date,reason
 48,48,9,Student,Approved,2025-01-01,2026-01-01,
 49,49,1,Tourist,Approved,2025-06-20,2025-07-20,
 50,50,2,Transit,Approved,2025-05-05,2025-05-15
+51,46,12,Work,Expired,2025-07-25,2026-05-17,
+52,53,9,Student,Expired,2025-10-28,2027-01-07,
+53,65,42,Transit,Approved,2025-04-05,2025-09-06,
+54,58,3,Diplomatic,Expired,2025-03-09,2026-05-13,
+55,54,33,Student,Approved,2025-12-01,2026-04-04,
+56,2,35,Diplomatic,Rejected,2025-04-18,2026-11-18,Previous overstay
+57,55,37,Work,Expired,2026-01-24,2027-03-18,
+58,34,10,Tourist,Approved,2025-11-28,2026-04-29,
+59,9,38,Diplomatic,Rejected,2025-01-14,2025-09-11,Previous overstay
+60,2,3,Diplomatic,Pending,2025-08-14,2027-03-30,
+61,7,34,Transit,Rejected,2025-01-24,2026-10-06,No job offer
+62,1,47,Diplomatic,Approved,2025-12-12,2026-10-05,
+63,54,45,Student,Approved,2026-02-04,2026-09-02,
+64,9,32,Diplomatic,Approved,2025-09-23,2026-12-13,
+65,3,48,Tourist,Expired,2025-09-10,2027-03-28,
+66,8,4,Transit,Expired,2025-03-07,2025-07-19,
+67,98,13,Transit,Pending,2025-05-21,2026-06-29,
+68,64,26,Work,Pending,2025-03-04,2025-11-14,
+69,67,22,Student,Rejected,2025-06-15,2027-02-27,Previous overstay
+70,79,50,Work,Pending,2025-08-25,2026-06-28,
+71,2,15,Transit,Pending,2025-08-10,2025-11-09,
+72,87,21,Work,Rejected,2026-01-31,2027-02-04,No job offer
+73,10,3,Work,Rejected,2025-10-28,2027-06-28,No job offer
+74,56,21,Student,Pending,2025-05-31,2027-02-01,
+75,66,14,Work,Expired,2025-03-30,2025-07-27,
+76,48,6,Work,Pending,2025-06-29,2026-09-28,
+77,48,18,Student,Rejected,2026-01-13,2027-06-25,No job offer
+78,73,9,Work,Rejected,2025-12-16,2026-11-11,Previous overstay
+79,42,5,Transit,Pending,2025-02-04,2025-12-28,
+80,77,5,Transit,Expired,2025-04-14,2026-08-26,
+81,80,50,Tourist,Approved,2025-11-16,2026-12-07,
+82,54,49,Diplomatic,Approved,2025-11-21,2027-02-14,
+83,42,16,Diplomatic,Rejected,2026-01-29,2027-06-30,Insufficient funds
+84,38,34,Work,Rejected,2025-07-16,2026-11-09,Missing documents
+85,19,30,Work,Approved,2025-01-02,2026-06-21,
+86,60,9,Transit,Expired,2025-03-25,2026-02-10,
+87,5,28,Work,Rejected,2025-10-03,2027-06-12,No job offer
+88,80,36,Diplomatic,Expired,2025-07-03,2025-10-08,
+89,62,31,Diplomatic,Rejected,2025-09-11,2026-07-12,Insufficient funds
+90,92,48,Transit,Approved,2025-05-07,2026-07-23,
+91,46,11,Transit,Pending,2025-01-01,2025-10-25,
+92,59,34,Student,Approved,2025-08-31,2026-10-18,
+93,44,6,Tourist,Pending,2025-01-13,2025-07-06,
+94,59,7,Transit,Approved,2025-07-29,2026-09-11,
+95,4,14,Work,Pending,2025-12-02,2027-05-23,
+96,99,21,Student,Pending,2025-10-01,2027-04-18,
+97,84,39,Student,Approved,2025-03-22,2026-09-21,
+98,29,25,Tourist,Expired,2025-12-01,2026-08-22,
+99,56,4,Transit,Expired,2025-05-14,2026-03-08,
+100,4,30,Diplomatic,Rejected,2025-12-22,2027-02-06,No job offer
