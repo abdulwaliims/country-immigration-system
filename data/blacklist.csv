@@ -4,3 +4,23 @@ blacklist_id,traveler_id,reason,ban_start,ban_end,reinstated
 3,16,Overstay previous visa by 30 days,2024-12-15,2025-12-14,0
 4,28,Working on tourist visa,2024-10-01,2027-09-30,0
 5,36,Criminal record not disclosed,2025-05-01,2030-04-30,0
+6,24,Criminal record,2026-05-17,2031-05-17,0
+7,4,Working on tourist visa,2026-05-17,2028-05-17,0
+8,19,Visa overstay,2026-05-17,2031-05-17,0
+9,15,Criminal record,2026-05-17,2030-05-17,0
+10,65,Criminal record,2026-05-17,2030-05-17,0
+11,49,Criminal record,2026-05-17,2030-05-17,0
+12,39,Working on tourist visa,2026-05-17,2027-05-17,0
+13,60,Criminal record,2026-05-17,2029-05-17,0
+14,97,Working on tourist visa,2026-05-17,2028-05-17,0
+15,15,Falsified documents,2026-05-17,2028-05-17,0
+16,82,Visa overstay,2026-05-17,2027-05-17,0
+17,59,Visa overstay,2026-05-17,2030-05-17,0
+18,37,Visa overstay,2026-05-17,2030-05-17,0
+19,20,Criminal record,2026-05-17,2031-05-17,0
+20,7,Criminal record,2026-05-17,2030-05-17,0
+21,21,Criminal record,2026-05-17,2028-05-17,0
+22,82,Falsified documents,2026-05-17,2028-05-17,0
+23,4,Visa overstay,2026-05-17,2031-05-17,0
+24,83,Falsified documents,2026-05-17,2028-05-17,0
+25,15,Falsified documents,2026-05-17,2030-05-17,0
