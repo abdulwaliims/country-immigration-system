@@ -1,0 +1,266 @@
+/* ============================================================
+   dashboard.css — Dashboard Page Styles
+   ============================================================ */
+
+/* ---------- Welcome Banner ---------- */
+.welcome-banner {
+  background: linear-gradient(135deg, var(--clr-navy) 0%, var(--clr-navy-light) 100%);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Decorative gold corner arc */
+.welcome-banner::after {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  border: 30px solid rgba(201,168,76,.12);
+  pointer-events: none;
+}
+
+.welcome-banner__text {}
+
+.welcome-banner__greeting {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,.65);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.welcome-banner__title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--clr-white);
+  margin-bottom: 6px;
+}
+
+.welcome-banner__subtitle {
+  font-size: 0.83rem;
+  color: rgba(255,255,255,.65);
+}
+
+.welcome-banner__meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.welcome-banner__date-block {
+  text-align: right;
+}
+
+.welcome-banner__date {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--clr-gold);
+}
+
+.welcome-banner__time {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,.6);
+  font-family: var(--font-mono);
+  margin-top: 2px;
+}
+
+/* ---------- Two-column layout ---------- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ---------- Recent Activity List ---------- */
+.activity-list { list-style: none; }
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.activity-item:last-child { border-bottom: none; }
+
+.activity-item__dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.activity-item__dot--green { background: var(--clr-success); }
+.activity-item__dot--red   { background: var(--clr-danger); }
+.activity-item__dot--amber { background: var(--clr-warning); }
+.activity-item__dot--blue  { background: var(--clr-info); }
+
+.activity-item__body { flex: 1; }
+
+.activity-item__text {
+  font-size: 0.845rem;
+  color: var(--clr-text-body);
+  line-height: 1.4;
+}
+
+.activity-item__text strong { color: var(--clr-text-dark); }
+
+.activity-item__time {
+  font-size: 0.72rem;
+  color: var(--clr-text-muted);
+  margin-top: 2px;
+  font-family: var(--font-mono);
+}
+
+/* ---------- Quick Actions ---------- */
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.quick-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: var(--clr-off-white);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--clr-text-dark);
+  text-align: center;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.quick-action-btn:hover {
+  background: var(--clr-navy);
+  color: var(--clr-white);
+  border-color: var(--clr-navy);
+  box-shadow: var(--shadow-md);
+}
+
+.quick-action-btn:hover svg { color: var(--clr-gold); }
+
+.quick-action-btn svg {
+  color: var(--clr-navy);
+  transition: color var(--transition);
+}
+
+/* ---------- Port Status Cards ---------- */
+.port-status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.port-card {
+  background: var(--clr-off-white);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.port-card__name {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: var(--clr-text-dark);
+  margin-bottom: 4px;
+}
+
+.port-card__type {
+  font-size: 0.7rem;
+  color: var(--clr-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 10px;
+}
+
+.port-card__stats {
+  display: flex;
+  gap: 14px;
+}
+
+.port-card__stat-val {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--clr-text-dark);
+}
+
+.port-card__stat-lbl {
+  font-size: 0.68rem;
+  color: var(--clr-text-muted);
+}
+
+/* ---------- Visa Donut (pure CSS placeholder) ---------- */
+.visa-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.visa-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.visa-bar-row__label {
+  font-size: 0.78rem;
+  color: var(--clr-text-body);
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.visa-bar-track {
+  flex: 1;
+  height: 7px;
+  background: var(--clr-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.visa-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.visa-bar-row__count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--clr-text-dark);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .welcome-banner { flex-direction: column; }
+  .welcome-banner__meta { align-self: flex-start; }
+  .quick-actions { grid-template-columns: repeat(2, 1fr); }
+}

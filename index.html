@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Country Immigration Management System</title>
+
+  <!-- Google Fonts: Playfair Display (display) + Source Sans 3 (body) + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Modular CSS -->
+  <link rel="stylesheet" href="css/variables.css">  <!-- tokens & reset      -->
+  <link rel="stylesheet" href="css/layout.css">     <!-- sidebar & topbar    -->
+  <link rel="stylesheet" href="css/components.css"> <!-- buttons, tables, etc-->
+  <link rel="stylesheet" href="css/dashboard.css">  <!-- dashboard specifics -->
+</head>
+<body>
+
+<!-- ============================================================
+     APP SHELL
+     ============================================================ -->
+<div class="app-shell">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Brand -->
+    <div class="sidebar__brand">
+      <div class="sidebar__brand-icon">
+        <!-- Passport / shield icon -->
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="sidebar__brand-text">
+        <div class="sidebar__brand-title">Immigration</div>
+        <div class="sidebar__brand-sub">Management System</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar__nav">
+
+      <div class="sidebar__section-label">Overview</div>
+
+      <div class="sidebar__item active" data-page="dashboard">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        <span class="nav-label">Dashboard</span>
+      </div>
+
+      <div class="sidebar__section-label">Immigration</div>
+
+      <div class="sidebar__item" data-page="travelers">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span class="nav-label">Travelers</span>
+      </div>
+
+      <div class="sidebar__item" data-page="visas">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+        <span class="nav-label">Visa Applications</span>
+        <!-- Live pending count badge -->
+        <span class="sidebar__badge" id="pendingBadge">0</span>
+      </div>
+
+      <div class="sidebar__item" data-page="crossings">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <polyline points="17 1 21 5 17 9"/>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+          <polyline points="7 23 3 19 7 15"/>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+        </svg>
+        <span class="nav-label">Border Crossings</span>
+      </div>
+
+      <div class="sidebar__section-label">Administration</div>
+
+      <div class="sidebar__item" data-page="ports">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span class="nav-label">Ports of Entry</span>
+      </div>
+
+      <div class="sidebar__item" data-page="countries">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+        </svg>
+        <span class="nav-label">Countries</span>
+      </div>
+
+      <div class="sidebar__item" data-page="blacklist">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+        </svg>
+        <span class="nav-label">Blacklist</span>
+      </div>
+
+    </nav>
+
+    <!-- Sidebar footer — logged-in user -->
+    <div class="sidebar__footer">
+      <div class="sidebar__user">
+        <div class="sidebar__avatar">IO</div>
+        <div class="sidebar__user-info">
+          <div class="sidebar__user-name">Immigration Officer</div>
+          <div class="sidebar__user-role">Senior Officer · Lahore</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ── MAIN AREA ── -->
+  <div class="main-area">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <!-- Mobile hamburger -->
+      <button class="topbar__hamburger" id="hamburgerBtn" aria-label="Open menu">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <!-- Page title — updated on navigation -->
+      <div class="topbar__page-title" id="topbarTitle">Dashboard</div>
+
+      <!-- Search -->
+      <div class="topbar__search">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" placeholder="Global search…" aria-label="Search">
+      </div>
+
+      <div class="topbar__actions">
+        <!-- Notifications -->
+        <button class="topbar__icon-btn" title="Notifications" aria-label="Notifications">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="dot"></span>
+        </button>
+
+        <!-- Settings -->
+        <button class="topbar__icon-btn" title="Settings" aria-label="Settings">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        <div class="topbar__divider"></div>
+
+        <!-- User chip -->
+        <div class="topbar__user-chip">
+          <div class="avatar">IO</div>
+          <span class="name">Officer</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── PAGE CONTENT ── -->
+    <main class="page-content">
+
+      <!-- Each page section; only one is visible at a time -->
+
+      <div class="page-view" data-page="dashboard" id="dashboardView">
+        <!-- Rendered by renderDashboard() -->
+      </div>
+
+      <div class="page-view" data-page="travelers" id="travelersView" style="display:none;">
+        <!-- Rendered by renderTravelers() -->
+      </div>
+
+      <div class="page-view" data-page="visas" id="visasView" style="display:none;">
+        <!-- Rendered by renderVisas() -->
+      </div>
+
+      <div class="page-view" data-page="crossings" id="crossingsView" style="display:none;">
+        <!-- Rendered by renderCrossings() -->
+      </div>
+
+      <div class="page-view" data-page="ports" id="portsView" style="display:none;">
+        <!-- Rendered by renderPorts() -->
+      </div>
+
+      <div class="page-view" data-page="countries" id="countriesView" style="display:none;">
+        <!-- Rendered by renderCountries() -->
+      </div>
+
+      <div class="page-view" data-page="blacklist" id="blacklistView" style="display:none;">
+        <!-- Rendered by renderBlacklist() -->
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+<!-- Add Traveler Modal -->
+<div class="modal-overlay" id="travelerModal">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__title">Register New Traveler</span>
+      <button class="modal__close" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal__body">
+      <div class="form-grid form-grid--2">
+        <div class="form-field form-field--full">
+          <div class="form-section-title">Personal Information</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Full Name <span class="required">*</span></label>
+          <input class="form-control" type="text" placeholder="e.g. Ahmed Hassan">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Date of Birth <span class="required">*</span></label>
+          <input class="form-control" type="date">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Passport Number <span class="required">*</span></label>
+          <input class="form-control" type="text" placeholder="e.g. PK5492810">
+          <span class="form-hint">6–20 uppercase alphanumeric characters</span>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Nationality <span class="required">*</span></label>
+          <select class="form-control">
+            <option value="">— Select Country —</option>
+            <option>Pakistan</option><option>United States</option>
+            <option>United Kingdom</option><option>Germany</option>
+            <option>United Arab Emirates</option><option>Saudi Arabia</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--outline" data-modal-close>Cancel</button>
+      <button class="btn btn--gold" id="saveTravelerBtn">Register Traveler</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Visa Application Modal -->
+<div class="modal-overlay" id="visaModal">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__title">New Visa Application</span>
+      <button class="modal__close" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal__body">
+      <div class="form-grid form-grid--2">
+        <div class="form-field form-field--full">
+          <div class="form-section-title">Applicant Details</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Traveler <span class="required">*</span></label>
+          <select class="form-control">
+            <option value="">— Select Traveler —</option>
+            <option>Ahmed Hassan</option><option>Sarah Mitchell</option>
+            <option>Oliver Bennett</option><option>Fatima Al-Rashid</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Destination Country <span class="required">*</span></label>
+          <select class="form-control">
+            <option value="">— Select Country —</option>
+            <option>Pakistan</option><option>United States</option>
+            <option>United Kingdom</option><option>Germany</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Visa Type <span class="required">*</span></label>
+          <select class="form-control">
+            <option value="">— Select Type —</option>
+            <option>Tourist</option><option>Work</option><option>Student</option>
+            <option>Transit</option><option>Diplomatic</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Status</label>
+          <select class="form-control">
+            <option>Pending</option><option>Approved</option><option>Rejected</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Start Date <span class="required">*</span></label>
+          <input class="form-control" type="date">
+        </div>
+        <div class="form-field">
+          <label class="form-label">End Date <span class="required">*</span></label>
+          <input class="form-control" type="date">
+        </div>
+        <div class="form-field form-field--full">
+          <label class="form-label">Reason for Travel</label>
+          <textarea class="form-control" placeholder="Briefly describe the purpose of travel…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--outline" data-modal-close>Cancel</button>
+      <button class="btn btn--gold" id="saveVisaBtn">Submit Application</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     ENTRY POINT — Module JS
+     ============================================================ -->
+<script type="module">
+  import { initSidebar, initNavigation, initModals, startClock, showToast } from './js/ui.js';
+  import { renderDashboard, renderTravelers, renderVisas,
+           renderCrossings, renderPorts, renderBlacklist, renderCountries } from './js/pages.js';
+  import { getDashboardStats } from './js/data.js';
+
+  /* Map each page key to its render function */
+  const renderers = {
+    dashboard: renderDashboard,
+    travelers: renderTravelers,
+    visas:     renderVisas,
+    crossings: renderCrossings,
+    ports:     renderPorts,
+    countries: renderCountries,
+    blacklist: renderBlacklist,
+  };
+
+  /* Initialise UI chrome */
+  initSidebar();
+  initModals();
+
+  /* Render initial page (dashboard) */
+  renderDashboard();
+  startClock('dashTime');
+
+  /* Set pending badge count */
+  const stats = getDashboardStats();
+  const badge = document.getElementById('pendingBadge');
+  if (badge) badge.textContent = stats.pendingVisas;
+
+  /* Navigation: render correct page on sidebar click */
+  initNavigation((key) => {
+    renderers[key]?.();
+    /* Restart clock if back on dashboard */
+    if (key === 'dashboard') startClock('dashTime');
+  });
+
+  /* Modal action feedback */
+  document.getElementById('saveTravelerBtn')?.addEventListener('click', () => {
+    showToast('Traveler registered successfully.', 'success');
+    document.getElementById('travelerModal').classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  document.getElementById('saveVisaBtn')?.addEventListener('click', () => {
+    showToast('Visa application submitted.', 'success');
+    document.getElementById('visaModal').classList.remove('open');
+    document.body.style.overflow = '';
+  });
+</script>
+
+</body>
+</html>
