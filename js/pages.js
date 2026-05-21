@@ -483,6 +483,12 @@ export function renderCrossings() {
           <span>Dashboard</span><span>›</span><span class="current">Border Crossings</span>
         </div>
       </div>
+      <div class="page-header__actions">
+        <button class="btn btn--gold" id="addCrossingBtn">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Record Crossing
+        </button>
+      </div>
     </div>
 
     <div class="filter-bar">
@@ -518,6 +524,17 @@ export function renderCrossings() {
     crossingPage = 1; _drawCrossings();
   };
   _drawCrossings();
+
+  document.getElementById('addCrossingBtn')?.addEventListener('click', () => {
+    openModal('crossingModal');
+    
+    // Set default crossing time
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000;
+    const localISOTime = (new Date(now - offset)).toISOString().slice(0, 16);
+    const timeField = document.getElementById('crossingTime');
+    if (timeField) timeField.value = localISOTime;
+  });
 }
 
 function _drawCrossings() {

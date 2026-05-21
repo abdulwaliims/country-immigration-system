@@ -327,6 +327,47 @@
   </div>
 </div>
 
+<!-- Record Crossing Modal -->
+<div class="modal-overlay" id="crossingModal">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__title">Record Border Crossing</span>
+      <button class="modal__close" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal__body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Traveler <span class="required">*</span></label>
+          <select class="form-control" id="crossingTraveler">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Port of Entry/Exit <span class="required">*</span></label>
+          <select class="form-control" id="crossingPort">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Direction <span class="required">*</span></label>
+          <select class="form-control" id="crossingDirection">
+            <option value="IN">Entry (IN)</option>
+            <option value="OUT">Exit (OUT)</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Date & Time <span class="required">*</span></label>
+          <input class="form-control" type="datetime-local" id="crossingTime">
+        </div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--outline" data-modal-close>Cancel</button>
+      <button class="btn btn--gold" id="saveCrossingBtn">Record Crossing</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ============================================================
      ENTRY POINT — Module JS
@@ -335,7 +376,7 @@
   import { initSidebar, initNavigation, initModals, startClock, showToast } from './js/ui.js';
   import { renderDashboard, renderTravelers, renderVisas,
            renderCrossings, renderPorts, renderBlacklist, renderCountries } from './js/pages.js';
-  import { getDashboardStats, loadBackendData, countries, travelers, visas } from './js/data.js';
+  import { getDashboardStats, loadBackendData, countries, travelers, visas, ports, border_crossings } from './js/data.js';
 
   /* Map each page key to its render function */
   const renderers = {
@@ -372,6 +413,22 @@
       const sortedTravelers = [...travelers].sort((a, b) => a.name.localeCompare(b.name));
       visaTraveler.innerHTML = '<option value="">— Select Traveler —</option>' +
         sortedTravelers.map(t => `<option value="${t.traveler_id}">${t.name} (${t.passport_no})</option>`).join('');
+    }
+
+    // Populate Traveler in crossing modal
+    const crossingTraveler = document.getElementById('crossingTraveler');
+    if (crossingTraveler) {
+      const sortedTravelers = [...travelers].sort((a, b) => a.name.localeCompare(b.name));
+      crossingTraveler.innerHTML = '<option value="">— Select Traveler —</option>' +
+        sortedTravelers.map(t => `<option value="${t.traveler_id}">${t.name} (${t.passport_no})</option>`).join('');
+    }
+
+    // Populate Port in crossing modal
+    const crossingPort = document.getElementById('crossingPort');
+    if (crossingPort) {
+      const sortedPorts = [...ports].sort((a, b) => a.name.localeCompare(b.name));
+      crossingPort.innerHTML = '<option value="">— Select Port —</option>' +
+        sortedPorts.map(p => `<option value="${p.port_id}">${p.name} (${p.type})</option>`).join('');
     }
   }
 
@@ -589,6 +646,82 @@
       if (badge) badge.textContent = stats.pendingVisas;
 
       document.getElementById('visaModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.getElementById('saveCrossingBtn')?.addEventListener('click', async () => {
+    const travelerId = parseInt(document.getElementById('crossingTraveler')?.value, 10);
+    const portId = parseInt(document.getElementById('crossingPort')?.value, 10);
+    const direction = document.getElementById('crossingDirection')?.value;
+    const crossingTime = document.getElementById('crossingTime')?.value;
+
+    if (!travelerId || !portId || !direction || !crossingTime) {
+      showToast('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    const payload = {
+      traveler_id: travelerId,
+      port_id: portId,
+      direction,
+      crossing_time: crossingTime.replace('T', ' ')
+    };
+
+    const apiBase = (window.location.protocol.startsWith('http') && !window.location.hostname.includes('github.io'))
+      ? window.location.origin
+      : 'http://127.0.0.1:5000';
+
+    try {
+      const response = await fetch(`${apiBase}/api/border_crossings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server returned status ${response.status}`);
+      }
+
+      const newCrossing = await response.json();
+      border_crossings.push(newCrossing);
+
+      // Refresh crossings page if currently viewed
+      const crossingsView = document.getElementById('crossingsView');
+      if (crossingsView && crossingsView.style.display !== 'none') {
+        renderCrossings();
+      }
+
+      // Refresh dashboard if viewed or stats
+      const dashboardView = document.getElementById('dashboardView');
+      if (dashboardView && dashboardView.style.display !== 'none') {
+        renderDashboard();
+      }
+
+      showToast('Border crossing recorded successfully.', 'success');
+      
+      document.getElementById('crossingModal').classList.remove('open');
+      document.body.style.overflow = '';
+
+      document.getElementById('crossingTraveler').value = '';
+      document.getElementById('crossingPort').value = '';
+      document.getElementById('crossingDirection').value = 'IN';
+      document.getElementById('crossingTime').value = '';
+
+    } catch (error) {
+      console.error('Error saving border crossing:', error);
+      showToast('Failed to save crossing. Saving in memory only.', 'error');
+
+      const tempId = border_crossings.length ? Math.max(...border_crossings.map(c => c.crossing_id)) + 1 : 1;
+      const localCrossing = { crossing_id: tempId, ...payload };
+      border_crossings.push(localCrossing);
+
+      const crossingsView = document.getElementById('crossingsView');
+      if (crossingsView && crossingsView.style.display !== 'none') {
+        renderCrossings();
+      }
+
+      document.getElementById('crossingModal').classList.remove('open');
       document.body.style.overflow = '';
     }
   });
