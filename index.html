@@ -376,7 +376,7 @@
   import { initSidebar, initNavigation, initModals, startClock, showToast } from './js/ui.js';
   import { renderDashboard, renderTravelers, renderVisas,
            renderCrossings, renderPorts, renderBlacklist, renderCountries } from './js/pages.js';
-  import { getDashboardStats, loadBackendData, countries, travelers, visas, ports, border_crossings } from './js/data.js';
+  import { getDashboardStats, loadBackendData, countries, travelers, visas, ports, border_crossings, isBlacklisted } from './js/data.js';
 
   /* Map each page key to its render function */
   const renderers = {
@@ -658,6 +658,12 @@
 
     if (!travelerId || !portId || !direction || !crossingTime) {
       showToast('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    // Block entry for blacklisted travelers
+    if (direction === 'IN' && isBlacklisted(travelerId)) {
+      showToast('ACCESS DENIED: This traveler is currently blacklisted and cannot enter the country.', 'error');
       return;
     }
 
