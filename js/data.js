@@ -5,7 +5,7 @@
    ============================================================ */
 
 /* ---------- Countries ---------- */
-export const countries = [
+export let countries = [
   { country_id: 1,  name: 'Pakistan',        population: 231000000, visa_policy: 'Visa on arrival for 48 countries' },
   { country_id: 2,  name: 'United States',   population: 331000000, visa_policy: 'Visa required for most nationalities' },
   { country_id: 3,  name: 'United Kingdom',  population: 67000000,  visa_policy: 'Standard visitor visa required' },
@@ -17,7 +17,7 @@ export const countries = [
 ];
 
 /* ---------- Travelers ---------- */
-export const travelers = [
+export let travelers = [
   { traveler_id: 1,  name: 'Ahmed Hassan',      passport_no: 'PK5492810', nationality_id: 1, date_of_birth: '1985-04-12' },
   { traveler_id: 2,  name: 'Sarah Mitchell',    passport_no: 'US8834021', nationality_id: 2, date_of_birth: '1990-07-23' },
   { traveler_id: 3,  name: 'Oliver Bennett',    passport_no: 'GB2290183', nationality_id: 3, date_of_birth: '1978-11-05' },
@@ -30,22 +30,49 @@ export const travelers = [
   { traveler_id: 10, name: 'Elena Petrova',     passport_no: 'TR8812640', nationality_id: 7, date_of_birth: '2001-02-16' },
 ];
 
-// // Create a new empty array that we will fill from the database
-// export let travelers = [];
+const API_PATHS = {
+  countries: '/api/countries',
+  travelers: '/api/travelers',
+  visas: '/api/visas',
+  ports: '/api/ports',
+  border_crossings: '/api/border_crossings',
+  blacklist: '/api/blacklist',
+};
 
-// // Create a function to fetch the real data
-// export async function fetchTravelersFromDB() {
-//     try {
-//         const response = await fetch('http://127.0.0.1:3000/api/travelers');
-//         travelers = await response.json();
-//         console.log("Travelers loaded from SQL:", travelers);
-//     } catch (error) {
-//         console.error("Failed to fetch travelers:", error);
-//     }
-// }
+function getApiUrl(baseUrl, path) {
+  const trimmed = baseUrl.replace(/\/+$|^\s+|\s+$/g, '');
+  return trimmed ? `${trimmed}${path}` : path;
+}
+
+async function fetchJson(url) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load ${url}: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function loadBackendData(baseUrl = 'http://127.0.0.1:5000') {
+  const [countriesData, travelersData, visasData, portsData, borderCrossingsData, blacklistData] =
+    await Promise.all([
+      fetchJson(getApiUrl(baseUrl, API_PATHS.countries)),
+      fetchJson(getApiUrl(baseUrl, API_PATHS.travelers)),
+      fetchJson(getApiUrl(baseUrl, API_PATHS.visas)),
+      fetchJson(getApiUrl(baseUrl, API_PATHS.ports)),
+      fetchJson(getApiUrl(baseUrl, API_PATHS.border_crossings)),
+      fetchJson(getApiUrl(baseUrl, API_PATHS.blacklist)),
+    ]);
+
+  countries = countriesData;
+  travelers = travelersData;
+  visas = visasData;
+  ports = portsData;
+  border_crossings = borderCrossingsData;
+  blacklist = blacklistData;
+}
 
 /* ---------- Visas ---------- */
-export const visas = [
+export let visas = [
   { visa_id: 1,  traveler_id: 1,  country_id: 2, type: 'Tourist',    status: 'Approved',  start_date: '2024-12-01', end_date: '2025-03-01', reason: 'Tourism and sightseeing' },
   { visa_id: 2,  traveler_id: 2,  country_id: 1, type: 'Work',       status: 'Approved',  start_date: '2024-11-15', end_date: '2025-11-15', reason: 'Employment at tech firm' },
   { visa_id: 3,  traveler_id: 3,  country_id: 4, type: 'Student',    status: 'Pending',   start_date: '2025-09-01', end_date: '2026-06-30', reason: 'Masters programme enrollment' },
@@ -59,7 +86,7 @@ export const visas = [
 ];
 
 /* ---------- Ports ---------- */
-export const ports = [
+export let ports = [
   { port_id: 1, name: 'Allama Iqbal International Airport', type: 'Airport',      country_id: 1 },
   { port_id: 2, name: 'Karachi Seaport',                    type: 'Seaport',      country_id: 1 },
   { port_id: 3, name: 'Wagah Border Crossing',              type: 'Land Border',  country_id: 1 },
@@ -70,7 +97,7 @@ export const ports = [
 ];
 
 /* ---------- Border Crossings ---------- */
-export const border_crossings = [
+export let border_crossings = [
   { crossing_id: 1,  traveler_id: 1,  port_id: 1, direction: 'OUT', crossing_time: '2024-12-01T08:35:00' },
   { crossing_id: 2,  traveler_id: 2,  port_id: 4, direction: 'IN',  crossing_time: '2024-11-15T14:20:00' },
   { crossing_id: 3,  traveler_id: 3,  port_id: 6, direction: 'IN',  crossing_time: '2025-01-05T11:00:00' },
@@ -84,7 +111,7 @@ export const border_crossings = [
 ];
 
 /* ---------- Blacklist ---------- */
-export const blacklist = [
+export let blacklist = [
   { blacklist_id: 1, traveler_id: 5, reason: 'Fraudulent visa documents submitted', ban_start: '2024-06-01', ban_end: '2026-06-01', reinstated: false },
   { blacklist_id: 2, traveler_id: 9, reason: 'Overstay of visa — exceeded 90 days', ban_start: '2024-07-15', ban_end: '2025-07-15', reinstated: false },
 ];

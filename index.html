@@ -235,20 +235,20 @@
         </div>
         <div class="form-field">
           <label class="form-label">Full Name <span class="required">*</span></label>
-          <input class="form-control" type="text" placeholder="e.g. Ahmed Hassan">
+          <input class="form-control" type="text" id="travelerName" placeholder="e.g. Ahmed Hassan">
         </div>
         <div class="form-field">
           <label class="form-label">Date of Birth <span class="required">*</span></label>
-          <input class="form-control" type="date">
+          <input class="form-control" type="date" id="travelerDob">
         </div>
         <div class="form-field">
           <label class="form-label">Passport Number <span class="required">*</span></label>
-          <input class="form-control" type="text" placeholder="e.g. PK5492810">
+          <input class="form-control" type="text" id="travelerPassport" placeholder="e.g. PK5492810">
           <span class="form-hint">6–20 uppercase alphanumeric characters</span>
         </div>
         <div class="form-field">
           <label class="form-label">Nationality <span class="required">*</span></label>
-          <select class="form-control">
+          <select class="form-control" id="travelerNationality">
             <option value="">— Select Country —</option>
             <option>Pakistan</option><option>United States</option>
             <option>United Kingdom</option><option>Germany</option>
@@ -278,7 +278,7 @@
         </div>
         <div class="form-field">
           <label class="form-label">Traveler <span class="required">*</span></label>
-          <select class="form-control">
+          <select class="form-control" id="visaTraveler">
             <option value="">— Select Traveler —</option>
             <option>Ahmed Hassan</option><option>Sarah Mitchell</option>
             <option>Oliver Bennett</option><option>Fatima Al-Rashid</option>
@@ -286,7 +286,7 @@
         </div>
         <div class="form-field">
           <label class="form-label">Destination Country <span class="required">*</span></label>
-          <select class="form-control">
+          <select class="form-control" id="visaDestination">
             <option value="">— Select Country —</option>
             <option>Pakistan</option><option>United States</option>
             <option>United Kingdom</option><option>Germany</option>
@@ -294,7 +294,7 @@
         </div>
         <div class="form-field">
           <label class="form-label">Visa Type <span class="required">*</span></label>
-          <select class="form-control">
+          <select class="form-control" id="visaType">
             <option value="">— Select Type —</option>
             <option>Tourist</option><option>Work</option><option>Student</option>
             <option>Transit</option><option>Diplomatic</option>
@@ -302,21 +302,21 @@
         </div>
         <div class="form-field">
           <label class="form-label">Status</label>
-          <select class="form-control">
+          <select class="form-control" id="visaStatus">
             <option>Pending</option><option>Approved</option><option>Rejected</option>
           </select>
         </div>
         <div class="form-field">
           <label class="form-label">Start Date <span class="required">*</span></label>
-          <input class="form-control" type="date">
+          <input class="form-control" type="date" id="visaStartDate">
         </div>
         <div class="form-field">
           <label class="form-label">End Date <span class="required">*</span></label>
-          <input class="form-control" type="date">
+          <input class="form-control" type="date" id="visaEndDate">
         </div>
         <div class="form-field form-field--full">
           <label class="form-label">Reason for Travel</label>
-          <textarea class="form-control" placeholder="Briefly describe the purpose of travel…"></textarea>
+          <textarea class="form-control" id="visaReason" placeholder="Briefly describe the purpose of travel…"></textarea>
         </div>
       </div>
     </div>
@@ -335,7 +335,7 @@
   import { initSidebar, initNavigation, initModals, startClock, showToast } from './js/ui.js';
   import { renderDashboard, renderTravelers, renderVisas,
            renderCrossings, renderPorts, renderBlacklist, renderCountries } from './js/pages.js';
-  import { getDashboardStats } from './js/data.js';
+  import { getDashboardStats, loadBackendData, countries, travelers, visas } from './js/data.js';
 
   /* Map each page key to its render function */
   const renderers = {
@@ -348,18 +348,59 @@
     blacklist: renderBlacklist,
   };
 
-  /* Initialise UI chrome */
-  initSidebar();
-  initModals();
+  function populateDropdowns() {
+    // Populate Nationality in traveler modal
+    const travelerNationality = document.getElementById('travelerNationality');
+    if (travelerNationality) {
+      // Sort countries alphabetically
+      const sortedCountries = [...countries].sort((a, b) => a.name.localeCompare(b.name));
+      travelerNationality.innerHTML = '<option value="">— Select Country —</option>' +
+        sortedCountries.map(c => `<option value="${c.country_id}">${c.name}</option>`).join('');
+    }
 
-  /* Render initial page (dashboard) */
-  renderDashboard();
-  startClock('dashTime');
+    // Populate Destination Country in visa modal
+    const visaDestination = document.getElementById('visaDestination');
+    if (visaDestination) {
+      const sortedCountries = [...countries].sort((a, b) => a.name.localeCompare(b.name));
+      visaDestination.innerHTML = '<option value="">— Select Country —</option>' +
+        sortedCountries.map(c => `<option value="${c.country_id}">${c.name}</option>`).join('');
+    }
 
-  /* Set pending badge count */
-  const stats = getDashboardStats();
-  const badge = document.getElementById('pendingBadge');
-  if (badge) badge.textContent = stats.pendingVisas;
+    // Populate Traveler in visa modal
+    const visaTraveler = document.getElementById('visaTraveler');
+    if (visaTraveler) {
+      const sortedTravelers = [...travelers].sort((a, b) => a.name.localeCompare(b.name));
+      visaTraveler.innerHTML = '<option value="">— Select Traveler —</option>' +
+        sortedTravelers.map(t => `<option value="${t.traveler_id}">${t.name} (${t.passport_no})</option>`).join('');
+    }
+  }
+
+  async function initApp() {
+    initSidebar();
+    initModals();
+
+    const apiBase = window.location.protocol.startsWith('http')
+      ? window.location.origin
+      : 'http://127.0.0.1:5000';
+
+    try {
+      await loadBackendData(apiBase);
+      showToast('Backend data loaded.', 'success');
+    } catch (error) {
+      console.error('Backend load failed:', error);
+      showToast('Backend unavailable. Using local fallback data.', 'error');
+    }
+
+    populateDropdowns();
+    renderDashboard();
+    startClock('dashTime');
+
+    const stats = getDashboardStats();
+    const badge = document.getElementById('pendingBadge');
+    if (badge) badge.textContent = stats.pendingVisas;
+  }
+
+  initApp();
 
   /* Navigation: render correct page on sidebar click */
   initNavigation((key) => {
@@ -369,16 +410,187 @@
   });
 
   /* Modal action feedback */
-  document.getElementById('saveTravelerBtn')?.addEventListener('click', () => {
-    showToast('Traveler registered successfully.', 'success');
-    document.getElementById('travelerModal').classList.remove('open');
-    document.body.style.overflow = '';
+  document.getElementById('saveTravelerBtn')?.addEventListener('click', async () => {
+    const name = document.getElementById('travelerName')?.value.trim();
+    const dob = document.getElementById('travelerDob')?.value;
+    const passport = document.getElementById('travelerPassport')?.value.trim().toUpperCase();
+    const nationalityId = parseInt(document.getElementById('travelerNationality')?.value, 10);
+
+    if (!name || !dob || !passport || !nationalityId) {
+      showToast('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    // Passport validation: 6-20 uppercase alphanumeric
+    const passportRegex = /^[A-Z0-9]{6,20}$/;
+    if (!passportRegex.test(passport)) {
+      showToast('Passport must be 6–20 uppercase alphanumeric characters.', 'error');
+      return;
+    }
+
+    const payload = {
+      name,
+      date_of_birth: dob,
+      passport_no: passport,
+      nationality_id: nationalityId
+    };
+
+    const apiBase = window.location.protocol.startsWith('http')
+      ? window.location.origin
+      : 'http://127.0.0.1:5000';
+
+    try {
+      const response = await fetch(`${apiBase}/api/travelers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server returned status ${response.status}`);
+      }
+
+      const newTraveler = await response.json();
+      travelers.push(newTraveler);
+      
+      populateDropdowns();
+
+      // Refresh travelers page if currently viewed
+      const travelersView = document.getElementById('travelersView');
+      if (travelersView && travelersView.style.display !== 'none') {
+        renderTravelers();
+      }
+
+      // Refresh dashboard stats
+      const stats = getDashboardStats();
+      const badge = document.getElementById('pendingBadge');
+      if (badge) badge.textContent = stats.pendingVisas;
+      
+      showToast('Traveler registered successfully.', 'success');
+      
+      document.getElementById('travelerModal').classList.remove('open');
+      document.body.style.overflow = '';
+      
+      document.getElementById('travelerName').value = '';
+      document.getElementById('travelerDob').value = '';
+      document.getElementById('travelerPassport').value = '';
+      document.getElementById('travelerNationality').value = '';
+
+    } catch (error) {
+      console.error('Error saving traveler:', error);
+      showToast('Failed to save traveler. Saving in memory only.', 'error');
+
+      const tempId = travelers.length ? Math.max(...travelers.map(t => t.traveler_id)) + 1 : 1;
+      const localTraveler = { traveler_id: tempId, ...payload };
+      travelers.push(localTraveler);
+      populateDropdowns();
+      
+      const travelersView = document.getElementById('travelersView');
+      if (travelersView && travelersView.style.display !== 'none') {
+        renderTravelers();
+      }
+
+      document.getElementById('travelerModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
   });
 
-  document.getElementById('saveVisaBtn')?.addEventListener('click', () => {
-    showToast('Visa application submitted.', 'success');
-    document.getElementById('visaModal').classList.remove('open');
-    document.body.style.overflow = '';
+  document.getElementById('saveVisaBtn')?.addEventListener('click', async () => {
+    const travelerId = parseInt(document.getElementById('visaTraveler')?.value, 10);
+    const countryId = parseInt(document.getElementById('visaDestination')?.value, 10);
+    const type = document.getElementById('visaType')?.value;
+    const status = document.getElementById('visaStatus')?.value || 'Pending';
+    const startDate = document.getElementById('visaStartDate')?.value;
+    const endDate = document.getElementById('visaEndDate')?.value;
+    const reason = document.getElementById('visaReason')?.value.trim();
+
+    if (!travelerId || !countryId || !type || !startDate || !endDate) {
+      showToast('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    if (new Date(startDate) > new Date(endDate)) {
+      showToast('Start date cannot be after end date.', 'error');
+      return;
+    }
+
+    const payload = {
+      traveler_id: travelerId,
+      country_id: countryId,
+      type,
+      status,
+      start_date: startDate,
+      end_date: endDate,
+      reason
+    };
+
+    const apiBase = window.location.protocol.startsWith('http')
+      ? window.location.origin
+      : 'http://127.0.0.1:5000';
+
+    try {
+      const response = await fetch(`${apiBase}/api/visas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server returned status ${response.status}`);
+      }
+
+      const newVisa = await response.json();
+      visas.push(newVisa);
+
+      // Refresh visa page if currently viewed
+      const visasView = document.getElementById('visasView');
+      if (visasView && visasView.style.display !== 'none') {
+        renderVisas();
+      }
+
+      // Refresh dashboard if viewed or stats
+      const stats = getDashboardStats();
+      const badge = document.getElementById('pendingBadge');
+      if (badge) badge.textContent = stats.pendingVisas;
+      
+      const dashboardView = document.getElementById('dashboardView');
+      if (dashboardView && dashboardView.style.display !== 'none') {
+        renderDashboard();
+      }
+
+      showToast('Visa application submitted successfully.', 'success');
+      
+      document.getElementById('visaModal').classList.remove('open');
+      document.body.style.overflow = '';
+
+      document.getElementById('visaTraveler').value = '';
+      document.getElementById('visaDestination').value = '';
+      document.getElementById('visaType').value = '';
+      document.getElementById('visaStatus').value = 'Pending';
+      document.getElementById('visaStartDate').value = '';
+      document.getElementById('visaEndDate').value = '';
+      document.getElementById('visaReason').value = '';
+
+    } catch (error) {
+      console.error('Error saving visa:', error);
+      showToast('Failed to save visa. Saving in memory only.', 'error');
+
+      const tempId = visas.length ? Math.max(...visas.map(v => v.visa_id)) + 1 : 1;
+      const localVisa = { visa_id: tempId, ...payload };
+      visas.push(localVisa);
+
+      const visasView = document.getElementById('visasView');
+      if (visasView && visasView.style.display !== 'none') {
+        renderVisas();
+      }
+
+      const stats = getDashboardStats();
+      const badge = document.getElementById('pendingBadge');
+      if (badge) badge.textContent = stats.pendingVisas;
+
+      document.getElementById('visaModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
   });
 </script>
 
