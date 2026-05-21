@@ -142,7 +142,7 @@ export function isBlacklisted(traveler_id) {
     b.traveler_id === traveler_id &&
     !b.reinstated &&
     b.ban_start <= today &&
-    b.ban_end >= today
+    (!b.ban_end || b.ban_end >= today)
   );
 }
 

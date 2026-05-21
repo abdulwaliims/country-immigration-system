@@ -485,6 +485,12 @@
       return;
     }
 
+    // Date of Birth validation: cannot be in the future
+    if (new Date(dob) > new Date()) {
+      showToast('Registration Failed: Date of birth cannot be in the future.', 'error');
+      return;
+    }
+
     // Duplicate Passport validation
     const duplicate = travelers.find(t => t.passport_no === passport);
     if (duplicate) {
@@ -685,6 +691,12 @@
 
     if (!travelerId || !portId || !direction || !crossingTime) {
       showToast('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    // Crossing Time validation: cannot be in the future
+    if (new Date(crossingTime) > new Date()) {
+      showToast('Record Failed: Crossing time cannot be in the future.', 'error');
       return;
     }
 
