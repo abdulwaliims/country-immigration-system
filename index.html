@@ -725,8 +725,14 @@
     if (travelerCrossings.length > 0) {
       const lastCrossing = travelerCrossings[travelerCrossings.length - 1];
       if (lastCrossing.direction === direction) {
-        const statusText = direction === 'IN' ? 'inside' : 'outside';
-        showToast(`Sequence Error: Traveler is already logged as ${statusText} the country (Last crossing was ${lastCrossing.direction}).`, 'error');
+        if (direction === 'IN') {
+          const lastPort = ports.find(p => p.port_id === lastCrossing.port_id);
+          const lastCountry = countries.find(c => c.country_id === lastPort?.country_id);
+          const countryName = lastCountry ? lastCountry.name : 'another country';
+          showToast(`Sequence Error: Traveler is already inside ${countryName} (entered via ${lastPort ? lastPort.name : 'unknown port'}). They must exit first.`, 'error');
+        } else {
+          showToast(`Sequence Error: Traveler is already outside the country (last crossing was an Exit).`, 'error');
+        }
         return;
       }
     }
