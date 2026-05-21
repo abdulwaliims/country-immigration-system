@@ -379,7 +379,7 @@
     initSidebar();
     initModals();
 
-    const apiBase = window.location.protocol.startsWith('http')
+    const apiBase = (window.location.protocol.startsWith('http') && !window.location.hostname.includes('github.io'))
       ? window.location.origin
       : 'http://127.0.0.1:5000';
 
