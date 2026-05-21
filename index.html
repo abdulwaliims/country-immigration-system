@@ -485,6 +485,13 @@
       return;
     }
 
+    // Duplicate Passport validation
+    const duplicate = travelers.find(t => t.passport_no === passport);
+    if (duplicate) {
+      showToast(`Registration Failed: Passport number ${passport} is already registered to ${duplicate.name}.`, 'error');
+      return;
+    }
+
     const payload = {
       name,
       date_of_birth: dob,
@@ -568,6 +575,26 @@
 
     if (new Date(startDate) > new Date(endDate)) {
       showToast('Start date cannot be after end date.', 'error');
+      return;
+    }
+
+    // Blacklist check for approved visas
+    if (status === 'Approved' && isBlacklisted(travelerId)) {
+      showToast('Cannot approve visa: Traveler is currently blacklisted.', 'error');
+      return;
+    }
+
+    // Overlapping Visa validation for the same country
+    const hasOverlap = visas.some(v => 
+      v.traveler_id === travelerId &&
+      v.country_id === countryId &&
+      v.status === 'Approved' &&
+      ((startDate >= v.start_date && startDate <= v.end_date) ||
+       (endDate >= v.start_date && endDate <= v.end_date) ||
+       (startDate <= v.start_date && endDate >= v.end_date))
+    );
+    if (hasOverlap) {
+      showToast('Traveler already has an approved visa for this country during the selected dates.', 'error');
       return;
     }
 
@@ -665,6 +692,53 @@
     if (direction === 'IN' && isBlacklisted(travelerId)) {
       showToast('ACCESS DENIED: This traveler is currently blacklisted and cannot enter the country.', 'error');
       return;
+    }
+
+    const traveler = travelers.find(t => t.traveler_id === travelerId);
+    const port = ports.find(p => p.port_id === portId);
+    if (!traveler || !port) {
+      showToast('Invalid traveler or port selected.', 'error');
+      return;
+    }
+
+    const targetCountryId = port.country_id;
+    const travelerNationalityId = traveler.nationality_id;
+    const isCitizen = travelerNationalityId === targetCountryId;
+
+    // 1. Alternating Crossing Sequence Check (IN/OUT)
+    const travelerCrossings = border_crossings
+      .filter(c => c.traveler_id === travelerId)
+      .sort((a, b) => new Date(a.crossing_time) - new Date(b.crossing_time));
+    
+    if (travelerCrossings.length > 0) {
+      const lastCrossing = travelerCrossings[travelerCrossings.length - 1];
+      if (lastCrossing.direction === direction) {
+        const statusText = direction === 'IN' ? 'inside' : 'outside';
+        showToast(`Sequence Error: Traveler is already logged as ${statusText} the country (Last crossing was ${lastCrossing.direction}).`, 'error');
+        return;
+      }
+    }
+
+    // 2. Visa Validation for Entry (IN)
+    if (direction === 'IN') {
+      // Citizens do not need a visa to enter their own country
+      if (!isCitizen) {
+        const crossingDateStr = crossingTime.split('T')[0]; // YYYY-MM-DD
+        
+        // Find an approved, active visa for the target country on the crossing date
+        const activeVisa = visas.find(v => 
+          v.traveler_id === travelerId &&
+          v.country_id === targetCountryId &&
+          v.status === 'Approved' &&
+          v.start_date <= crossingDateStr &&
+          v.end_date >= crossingDateStr
+        );
+
+        if (!activeVisa) {
+          showToast(`Access Denied: Traveler does not have a valid, approved visa for this country on ${crossingDateStr}.`, 'error');
+          return;
+        }
+      }
     }
 
     const payload = {
